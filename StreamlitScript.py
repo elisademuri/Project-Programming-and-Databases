@@ -134,9 +134,9 @@ max_anxiety=data[equal_to_max_mask]
 equal_to_max_mask = data['Depression (%)'] == data['Depression (%)'].max()
 max_depression=data[equal_to_max_mask] 
 col1, col2 = sl.columns(2)
-col1.write('Maximum value for anxiety disorders')
+col1.write('Maximum value for anxiety disorders (%)')
 col1.metric(max_anxiety['Country'].item(), max_anxiety['Anxiety disorders (%)'])
-col2.write('Maximum value for depression')
+col2.write('Maximum value for depression (%)')
 col2.metric(max_depression['Country'].item(),max_depression['Depression (%)'])
 data_for_graphs=data1[['Schizophrenia (%)','Bipolar disorder (%)','Eating disorders (%)','Anxiety disorders (%)','Drug use disorders (%)','Depression (%)','Alcohol use disorders (%)']]
 
@@ -158,11 +158,11 @@ plt.bar(data_for_bar['index'], data_for_bar[0], color=sb.color_palette("mako",7)
 plt.title('Average percentage of each mental disorder')
 plt.ylabel('(%)')
 plt.show()
-sl.write('Average percentage of each mental disorder')
+sl.write('**Average percentage of each mental disorder**')
 sl.write(fig)
 
 #Distribution for prevalences
-sl.write('Distribution of mental disorder rates')
+sl.write('**Distribution of mental disorder rates**')
 option=sl.selectbox('Pick one mental disorder:', ['Alcohol use disorders','Anxiety disorders','Bipolar disorder','Depression','Drug use disorders','Eating disorders','Schizophrenia'])
 fig=plt.figure(figsize=(30,10))
 plt.title(f"{option} (%)")
@@ -188,7 +188,7 @@ data_for_scatter=data.query('Year == 2017')
 data_for_scatter=data_for_scatter[['Schizophrenia (%)','Bipolar disorder (%)','Eating disorders (%)','Anxiety disorders (%)','Drug use disorders (%)','Depression (%)','Alcohol use disorders (%)']]
 fig=sb.pairplot(data_for_scatter, height=2, aspect=2)
 plt.show()
-sl.write('Relationship between mental disorder prevalences (for 2017)')
+sl.write('**Relationship between mental disorder prevalences (for 2017)**')
 sl.pyplot(fig.figure) 
 
 #Differences between countries
@@ -203,7 +203,7 @@ morocco=data[data['Country']=='Morocco']
 japan=data[data['Country']=='Japan']
 Lesotho=data[data['Country']=='Lesotho']
 
-sl.write('Trends of anxiety and depression prevalences in different countries') 
+sl.write('**Trends of anxiety and depression prevalences in different countries**') 
 option=sl.selectbox('Pick one country (or ALL for comparison of all countries together):', ['ALL', 'Albania', 'Greenland', 'Italy', 'Japan', 'Lesotho', 'Morocco', 'New Zealand', 'Norway', 'UK', 'USA'])
 col1, col2=sl.columns(2)
 fig=plt.figure(figsize=(30, 10)) 
@@ -295,7 +295,7 @@ col2.write('Depression:')
 col2.write(fig)
 
 #Geographic maps
-sl.write('Average values for prevalence of anxiety and depression in the world')
+sl.write('**Average values for prevalence of anxiety and depression in the world**')
 countries=pd.read_csv('countries_codes_and_coordinates.csv')
 countries=countries[['Alpha-3 code','Latitude (average)','Longitude (average)']]
 for i in range(len(countries.iloc[0])):
@@ -335,14 +335,14 @@ plt.bar(['Females','Males'], data_for_bar[0], color=['pink', 'blue'])
 plt.title('Prevalences of males and females suffering from mental disorders')
 plt.ylabel('(%)')
 plt.show()
-sl.write('Average values of prevalence of mental disorders for males and females')
+sl.write('**Average values of prevalence of mental disorders for males and females**')
 sl.write(fig)
 
+sl.write('**Gap between males and females in a selected year**')
 data_groupby=data.groupby('Year').mean()
 data_gap_MF=data_groupby[['Prevalence in males (%)','Prevalence in females (%)']]
 data_gap_MF['Gap']=data_gap_MF['Prevalence in females (%)']-data_gap_MF['Prevalence in males (%)']
 option=sl.slider('Pick a year:', 1990, 2017)
-sl.write('Gap between males and females in a selected year')
 sl.metric('(Average) Female prevalence (%) - (average) male prevalence (%)', '{:.3f}'.format(data_gap_MF['Gap'][option]))
 
 #Trends of prevalence in some countries for males and females
@@ -371,14 +371,14 @@ for i in range(len(list_of_countries)):
     ax.plot(np.array(list_of_countries[i]['Year']), np.array(list_of_countries[i]['Prevalence in females (%)']), label='Females', color='pink')
     ax.legend()
     plt.title(f"{get_df_name(list_of_countries[i])}")
-sl.write('Trend of prevalence of mental disorders between males and females in some countries')
+sl.write('**Trend of prevalence of mental disorders between males and females in some countries**')
 sl.write(fig_1)
 
 #Suicide rate vs. depression rate
 sl.subheader('Relationship between suicide and depression rates')
 data_suicide_depr=data[['Suicide rate (deaths per 100,000 individuals)','Depressive disorder rates (number suffering per 100,000)']]
 
-sl.caption('Association between suicide and depression rate')
+sl.write('**Association between suicide and depression rate**')
 fig=plt.figure(figsize=(30,10)) #General
 plt.title('Association between suicide rate (%) and depression rate (%)')
 plt.scatter(data_suicide_depr['Suicide rate (deaths per 100,000 individuals)'], data_suicide_depr['Depressive disorder rates (number suffering per 100,000)'], cmap='Blues')
@@ -427,7 +427,7 @@ for i in range(len(list_of_countries)):
     plt.xlabel('Suicide')
     plt.ylabel('Depression')
     plt.title(f"{get_df_name(list_of_countries[i])}")
-sl.write('Regression model: Association between suicide and depression rates in different countries') 
+sl.write('**Regression model** - association between suicide and depression rates in different countries') 
 sl.write(fig_1)
 
 #Prediction of prevalence
@@ -447,7 +447,7 @@ plt.scatter(x_test, y_pred, c='red')
 plt.plot(x_test, y_pred, c='grey')
 plt.xlabel('Year')
 plt.ylabel('Anxiety (%)')
-sl.write('Prediction of anxiety disorders (%) after 2017 in UK')
+sl.write('**Prediction** of anxiety disorders (%) after 2017 in UK')
 sl.write(fig_1)
 sl.caption('Linear graph')
 sl.write(str(y_pred))
@@ -476,7 +476,7 @@ plt.xlabel('Anxiety disorders (%)')
 plt.ylabel('Depression (%)')
 plt.legend()
 plt.show()
-sl.write('Groups of countries')
+sl.write('**Clustering** for countries')
 sl.write(fig)
 
 col1, col2, col3, col4= sl.columns(4)
